@@ -192,7 +192,7 @@ mOnTouchListener在setOnTouchListener时候被赋值.<br>
 =============================分割线====================================
 
 接下来介绍一下 ViewGroup 里面的事件传递.
-实例:ActivityB.setLisener()<br>
+实例:[ActivityB.setLisener()](./app/src/main/java/com/demo/mckiera/eventdispatch/ActivityB.java)<br>
 <image src="./image/jietu.png"/><br>
 分别点击一下btn1、btn2、btn3和空白区域，打印结果如下所示：<br>
 <image src="./image/my.png"/><br>
