@@ -244,8 +244,8 @@ mOnTouchListener在setOnTouchListener时候被赋值.<br>
     } 
     
 如果不看源码你还真可能被这注释吓到了，这么长的英文注释看得头都大了。可是源码竟然如此简单！只有一行代码，返回了一个false！
-好吧，既然是布尔型的返回，那么只有两种可能，我们在MyLayout中重写这个方法，然后返回一个true试试，代码如下所示：<br>
-实例:MyViewGroup<br>
+好吧，既然是布尔型的返回，那么只有两种可能，我们在MyViewGroup中重写这个方法，然后返回一个true试试，代码如下所示：<br>
+实例:[MyViewGroup](./app/src/main/java/com/demo/mckiera/eventdispatch/view/MyViewGroup.java)<br>
 分别点击一下btn1、btn2、btn3和空白区域，打印结果如下所示：<br>
 <image src="./image/onInterceptTouchEvent.png"/><br>
 
