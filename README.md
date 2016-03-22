@@ -192,9 +192,62 @@ mOnTouchListener在setOnTouchListener时候被赋值.<br>
 =============================分割线====================================
 
 接下来介绍一下 ViewGroup 里面的事件传递.
+实例:ActivityB.setLisener()<br>
+<image src="./image/jietu.png"/><br>
+分别点击一下btn1、btn2、btn3和空白区域，打印结果如下所示：<br>
+<image src="./image/my.png"/><br>
+当点击按钮的时候，MyLayout注册的onTouch方法并不会执行，只有点击空白区域的时候才会执行该方法。
+你可以先理解成Button的onClick方法将事件消费掉了，因此事件不会再继续向下传递。<br>
 
+那就说明Android中的touch事件是先传递到View，再传递到ViewGroup的？现在下结论还未免过早了，让我们再来做一个实验。
+查阅文档可以看到，ViewGroup中有一个onInterceptTouchEvent方法，我们来看一下这个方法的源码：
 
-
+    /** 
+     * Implement this method to intercept all touch screen motion events.  This 
+     * allows you to watch events as they are dispatched to your children, and 
+     * take ownership of the current gesture at any point. 
+     * 
+     * <p>Using this function takes some care, as it has a fairly complicated 
+     * interaction with {@link View#onTouchEvent(MotionEvent) 
+     * View.onTouchEvent(MotionEvent)}, and using it requires implementing 
+     * that method as well as this one in the correct way.  Events will be 
+     * received in the following order: 
+     * 
+     * <ol> 
+     * <li> You will receive the down event here. 
+     * <li> The down event will be handled either by a child of this view 
+     * group, or given to your own onTouchEvent() method to handle; this means 
+     * you should implement onTouchEvent() to return true, so you will 
+     * continue to see the rest of the gesture (instead of looking for 
+     * a parent view to handle it).  Also, by returning true from 
+     * onTouchEvent(), you will not receive any following 
+     * events in onInterceptTouchEvent() and all touch processing must 
+     * happen in onTouchEvent() like normal. 
+     * <li> For as long as you return false from this function, each following 
+     * event (up to and including the final up) will be delivered first here 
+     * and then to the target's onTouchEvent(). 
+     * <li> If you return true from here, you will not receive any 
+     * following events: the target view will receive the same event but 
+     * with the action {@link MotionEvent#ACTION_CANCEL}, and all further 
+     * events will be delivered to your onTouchEvent() method and no longer 
+     * appear here. 
+     * </ol> 
+     * 
+     * @param ev The motion event being dispatched down the hierarchy. 
+     * @return Return true to steal motion events from the children and have 
+     * them dispatched to this ViewGroup through onTouchEvent(). 
+     * The current target will receive an ACTION_CANCEL event, and no further 
+     * messages will be delivered here. 
+     */  
+    public boolean onInterceptTouchEvent(MotionEvent ev) {  
+        return false;  
+    } 
+    
+如果不看源码你还真可能被这注释吓到了，这么长的英文注释看得头都大了。可是源码竟然如此简单！只有一行代码，返回了一个false！
+好吧，既然是布尔型的返回，那么只有两种可能，我们在MyLayout中重写这个方法，然后返回一个true试试，代码如下所示：<br>
+实例:MyViewGroup<br>
+分别点击一下btn1、btn2、btn3和空白区域，打印结果如下所示：<br>
+<image src="./image/onInterceptTouchEvent.png"/><br>
 
 
 
