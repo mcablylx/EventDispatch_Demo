@@ -189,6 +189,9 @@ mOnTouchListener在setOnTouchListener时候被赋值.<br>
 因此在onTouchEvent的第14行判断时无法进入到if的内部，直接跳到第91行返回了false，也就导致后面其它的action都无法执行了。<br>
 
 
+=============================分割线====================================
+
+接下来介绍一下 ViewGroup 里面的事件传递.
 
 
 
