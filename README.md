@@ -21,14 +21,14 @@ onClick方法不再执行了！为什么会这样呢？你可以先理解成onTo
 首先你需要知道一点，只要你触摸到了任何一个控件，就一定会调用该控件的dispatchTouchEvent方法。那当我们去点击按钮的时候，就会去调用Button类里的dispatchTouchEvent方法，可是你会发现Button类里并没有这个方法，那么就到它的父类TextView里去找一找，你会发现TextView里也没有这个方法，那没办法了，只好继续在TextView的父类View里找一找，这个时候你终于在View里找到了这个方法，示意图如下<br>
 <image src="./image/dispatchTouchEvent.png"/><br>
 然后我们来看一下View中dispatchTouchEvent方法的源码：<br>
-
-public boolean dispatchTouchEvent(MotionEvent event) {  
-    if (mOnTouchListener != null && (mViewFlags & ENABLED_MASK) == ENABLED &&  
-            mOnTouchListener.onTouch(this, event)) {  
-        return true;  
-    }  
-    return onTouchEvent(event);  
-} 
+ 
+    public boolean dispatchTouchEvent(MotionEvent event) {  
+        if (mOnTouchListener != null && (mViewFlags & ENABLED_MASK) == ENABLED &&  
+                mOnTouchListener.onTouch(this, event)) {  
+            return true;  
+        }  
+        return onTouchEvent(event);  
+    } 
 
 
 
