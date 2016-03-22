@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * author by Mckiera
@@ -20,9 +21,31 @@ public class ActivityA extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Button btn = new Button(this);
-        setContentView(btn);
+        ImageView img = new ImageView(this);
+        setContentView(img);
         //onClick_onTouch(btn);
-        onTouch1(btn);
+//        onTouch1(btn);
+        onDown(img);
+    }
+
+    private void onDown(View btn){
+        btn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        Log.i(TAG, "ImageView onTouch event.getAction() : " + event.getAction() );
+                        return false;
+                    case MotionEvent.ACTION_UP:
+                        Log.i(TAG, "ImageView onTouch event.getAction() : " + event.getAction() );
+                        return false;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.i(TAG, "ImageView onTouch event.getAction() : " + event.getAction() );
+                        return false;
+                }
+                return false;
+            }
+        });
     }
 
     private void onTouch1(Button btn) {

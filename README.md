@@ -146,10 +146,47 @@ mOnTouchListener在setOnTouchListener时候被赋值.<br>
         return false;  
     } 
 
+相较于刚才的dispatchTouchEvent方法，onTouchEvent方法复杂了很多，不过没关系，我们只挑重点看就可以了。<br>
+首先在第14行我们可以看出，如果该控件是可以点击的就会进入到第16行的switch判断中去，而如果当前的事件是抬起手指，
+则会进入到MotionEvent.ACTION_UP这个case当中。在经过种种判断之后，会执行到第38行的performClick()方法，那我们进入到这个方法里瞧一瞧：<br>
 
+    public boolean performClick() {  
+        sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);  
+        if (mOnClickListener != null) {  
+            playSoundEffect(SoundEffectConstants.CLICK);  
+            mOnClickListener.onClick(this);  
+            return true;  
+        }  
+        return false;  
+    }  
 
+可以看到，只要mOnClickListener不是null，就会去调用它的onClick方法，那mOnClickListener又是在哪里赋值的呢？经过寻找后找到如下方法：<br>
 
+    public void setOnClickListener(OnClickListener l) {  
+        if (!isClickable()) {  
+            setClickable(true);  
+        }  
+        mOnClickListener = l;  
+    }  
+    
+一切都是那么清楚了！当我们通过调用setOnClickListener方法来给控件注册一个点击事件时，就会给mOnClickListener赋值。
+然后每当控件被点击时，都会在performClick()方法里回调被点击控件的onClick方法。<br />
 
+这样View的整个事件分发的流程就让我们搞清楚了！不过别高兴的太早，现在还没结束，还有一个很重要的知识点需要说明，就是touch事件的层级传递。
+我们都知道如果给一个控件注册了touch事件，每次点击它的时候都会触发一系列的ACTION_DOWN，ACTION_MOVE，ACTION_UP等事件。
+这里需要注意，如果你在执行ACTION_DOWN的时候返回了false，后面一系列其它的action就不会再得到执行了。
+简单的说，就是当dispatchTouchEvent在进行事件分发的时候，只有前一个action返回true，才会触发后一个action。<br>
+说到这里，很多的朋友肯定要有巨大的疑问了。这不是在自相矛盾吗？前面的例子中，明明在onTouch事件里面返回了false，ACTION_DOWN和ACTION_UP不是都得到执行了吗？
+其实你只是被假象所迷惑了，让我们仔细分析一下，在前面的例子当中，我们到底返回的是什么。
+参考着我们前面分析的源码，首先在onTouch事件里返回了false，就一定会进入到onTouchEvent方法中，然后我们来看一下onTouchEvent方法的细节。
+由于我们点击了按钮，就会进入到第14行这个if判断的内部，然后你会发现，不管当前的action是什么，最终都一定会走到第89行，返回一个true。<br>
+明明在onTouch事件里返回了false，系统还是在onTouchEvent方法中帮你返回了true。就因为这个原因，才使得前面的例子中ACTION_UP可以得到执行。
+那我们可以换一个控件，将按钮替换成ImageView，然后给它也注册一个touch事件，并返回false。<br>
+实例:ActivityA.onDown(ImageView)
+运行一下程序，点击ImageView，你会发现结果如下：<br>
+<image src="./image/image.png"/><br>
+在ACTION_DOWN执行完后，后面的一系列action都不会得到执行了。这又是为什么呢？因为ImageView和按钮不同，它是默认不可点击的，
+因此在onTouchEvent的第14行判断时无法进入到if的内部，直接跳到第91行返回了false，也就导致后面其它的action都无法执行了。<br>
 
 
 
