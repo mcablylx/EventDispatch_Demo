@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EventDispatchDemo.iml" filepath="$PROJECT_DIR$/EventDispatchDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newandroidfivez/newandroidfivez.iml" filepath="$PROJECT_DIR$/newandroidfivez/newandroidfivez.iml" />
     </modules>
   </component>
 </project>

@@ -21,6 +21,27 @@ public class ActivityA extends Activity {
         super.onCreate(savedInstanceState);
         Button btn = new Button(this);
         setContentView(btn);
+        //onClick_onTouch(btn);
+        onTouch1(btn);
+    }
+
+    private void onTouch1(Button btn) {
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Button onClick");
+            }
+        });
+        btn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i(TAG, "Button onTouch event.getAction() : " + event.getAction() );
+                return true;
+            }
+        });
+    }
+
+    private void onClick_onTouch(Button btn) {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
